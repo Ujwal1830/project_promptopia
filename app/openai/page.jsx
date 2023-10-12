@@ -66,17 +66,20 @@ const OpenAIPage = () => {
     }, 500);
   }, []);
 
+  const [failTofetchMessage, setFailTofetchMessage] = useState(false);
   const handleSendMessageCLick = async(e) => {
     e.preventDefault();
     
     if (inputValue.trim() === "") return;
-    await sendMessageInChat(inputValue, setChatLog, setIsLoading);
+    await sendMessageInChat(inputValue, setChatLog, setIsLoading, setFailTofetchMessage);
     setInputValue("");
   };
 
   const [newChatflag, setNewChatFlag] = useState(false)
   const handleNewChatClick = async()=>{
     if(chatLog.length !== 0 ){
+      setFailTofetchMessage(false)
+      setSummaryFlag(false);
       await handleSaveChatClick();
       // setChatSave(true);
       document.getElementById('my_modal_4').showModal();
@@ -120,6 +123,7 @@ const OpenAIPage = () => {
                 { newChatflag && "Chat is Already empty" } 
                 { sendChatFlag && "Chat Already Exist" } 
                 {summaryFlag && "Chat can't be empty !!👻" }
+                {failTofetchMessage && "Sorry, we encountered an issue!!🥲" }
               </span>
             </div>
           </dialog>}

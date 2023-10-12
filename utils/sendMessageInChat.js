@@ -1,6 +1,6 @@
 const { default: axios } = require("axios");
 
-export const sendMessageInChat = async (message, setChatLog, setIsLoading) => {
+export const sendMessageInChat = async (message, setChatLog, setIsLoading, setFailTofetchMessage) => {
     const url = "https://api.openai.com/v1/chat/completions";
     const headers = {
       "Content-Type": "application/json",
@@ -28,5 +28,7 @@ export const sendMessageInChat = async (message, setChatLog, setIsLoading) => {
       .catch((error) => {
         setIsLoading(false);
         console.log("Error :: " + error);
+        document.getElementById('my_modal_4').showModal();
+        setFailTofetchMessage(true);
       });
   };
