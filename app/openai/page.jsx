@@ -159,7 +159,7 @@ const OpenAIPage = () => {
               Open AI
             </span>
             { chatLog.length !== 0 && <div className="flex justify-end items-center">
-              <button onClick={handleSaveChatClick} className=" rounded-lg bg-purple-600 text-sm px-3 py-2" >Save Chat</button>
+              <button onClick={handleSaveChatClick} className=" rounded-lg bg-purple-600 text-sm px-3 py-2 text-white" >Save Chat</button>
             </div>}
           </div>
           <div className="h-fit flex flex-col overflow-y-auto">
