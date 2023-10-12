@@ -1,10 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import PromptCard from "./PromptCard";
+import LoadingLayout from "./LoadingLayout";
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
-    <div className="mt-16 prompt_layout">
+    <div className="prompt_layout">
       {data.map((post) => (
         <PromptCard 
           key={post._id}
@@ -16,7 +17,6 @@ const PromptCardList = ({ data, handleTagClick }) => {
   )
 }
 
-
 const Feed = () => {
   const [posts, setPosts] = useState([]);
   
@@ -24,16 +24,16 @@ const Feed = () => {
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
 
-  const fetchPosts = async ()=>{
-    const response = await fetch(`/api/prompt`);
-    const data = await response.json();
-
-    setPosts(data);
-  }
-
   useEffect(() => {
-    fetchPosts();
+      const fetchPosts = async ()=>{
+        const response = await fetch(`/api/prompt`);
+        const data = await response.json();
+    
+        setPosts(data);
+      }
+      fetchPosts();
   }, []);
+
   
   const filterPrompts = (searchText)=>{
     const regex = new RegExp(searchText, "i");
@@ -66,8 +66,9 @@ const Feed = () => {
 
 
   return (
-    <section className="feed">
-      <form className="relative w-full flex-center">
+    // className="feed"
+    <section className="px-8 sm:px-32 w-full">
+      <form className=" mt-1 flex justify-center items-center">
         <input
           type="text"
           placeholder="Search for a tag or a username"
@@ -77,16 +78,15 @@ const Feed = () => {
           className="search_input peer"
         />
       </form>
-
-
-     { searchText ? (
-        <PromptCardList 
-          data={searchResults}
-          handleTagClick={handleTagClick}
-        />
-      ) : (
-        <PromptCardList data={posts} handleTagClick={handleTagClick} />
-      )}
+      <hr className="my-2 border-t text-white w-full flex overflow-hidden" />
+        { searchText ? (
+            <PromptCardList 
+              data={searchResults}
+              handleTagClick={handleTagClick}
+            />
+          ) : (
+            <PromptCardList data={posts} handleTagClick={handleTagClick} />
+          )}
     </section>
   );
 };

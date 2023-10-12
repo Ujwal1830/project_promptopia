@@ -13,7 +13,10 @@ module.exports = {
       },
       colors: {
         'primary-orange': '#FF5722',
-      }
+        'blackish': '#161616',
+        'grayish': '#3B3B3B',
+        'lightgray' : '#e5e7eb',
+      },
     },
   },
   plugins: [require("daisyui")],
@@ -23,9 +26,6 @@ module.exports = {
       "dark",
       "cupcake",
       "bumblebee",
-      "emerald",
-      "corporate",
-      "synthwave",
       "pastel",
     ],
   },

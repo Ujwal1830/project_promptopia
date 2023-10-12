@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Form from "@components/Form";
+import LoadingLayout from "@components/LoadingLayout";
 
 const EditPrompt = () => {
     const router = useRouter();
@@ -16,7 +17,9 @@ const EditPrompt = () => {
     const searchParams = useSearchParams();
     const promptId = searchParams.get("id");
 
-    useEffect(()=>{
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+      setTimeout(async () => {    
         const getPromptDetails = async () => {
             const response = await fetch(`/api/prompt/${promptId}`)
             const data = await response.json();
@@ -25,10 +28,13 @@ const EditPrompt = () => {
                 prompt: data.prompt,
                 tag: data.tag,
             });
+            setLoading(false);
         }
 
         if(promptId) { getPromptDetails(); }
-    }, [promptId])
+
+      }, 2000);
+    }, [promptId]);
 
     const updatePrompt = async (e) => {
         e.preventDefault();
@@ -56,13 +62,15 @@ const EditPrompt = () => {
     };
 
     return (
-        <Form
-            type="Edit"
-            post={post}
-            setPost={setPost}
-            submitting={submitting}
-            handleSubmit={updatePrompt}
-        />
+        <LoadingLayout loading={loading} >
+            <Form
+                type="Edit"
+                post={post}
+                setPost={setPost}
+                submitting={submitting}
+                handleSubmit={updatePrompt}
+            />
+        </LoadingLayout>
     );
 };
 

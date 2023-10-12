@@ -8,37 +8,55 @@
   Note: The styles for this gradient grid background is heavily inspired by the creator of this amazing site (https://dub.sh) – all credits go to them! 
 */
 
-.main {
-  width: 100vw;
-  min-height: 100vh;
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  padding: 120px 24px 160px 24px;
-  pointer-events: none;
+body {
+  background-color: #161616; /* Use your desired color and opacity values */
 }
 
-.main:before {
-  background: radial-gradient(circle, rgb(223, 182, 232) 0, #fafafa 100%);
-  position: absolute;
+
+.main {
+  width: 100vw;
+  background-color: black;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 10px rgb(116, 116, 116); 
+  border-radius: 10px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(56, 56, 56); 
+  border-radius: 10px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(72, 72, 72); 
+}
+
+/* .main:before {
+  background: radial-gradient(circle, rgb(5, 5, 5) 0, #050505 100%);
+ 
   content: "";
   z-index: 2;
   width: 100%;
   height: 100%;
   top: 0;
-}
+} */
 
-.main:after {
+/* .main:after {
   content: "";
   background-image: url("/assets/images/grid.svg");
   z-index: 10;
-  position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   opacity: 0.5;
   filter: invert(1);
-}
+}  */
 
 .gradient {
   height: fit-content;
@@ -74,19 +92,11 @@
 /* Tailwind Styles */
 
 .app {
-  @apply relative z-10 flex justify-center items-center flex-col max-w-7xl mx-auto sm:px-16 px-6;
-}
-
-.black_btn {
-  @apply rounded-full border border-black bg-black py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm font-inter flex items-center justify-center;
-}
-
-.outline_btn {
-  @apply rounded-full border border-black bg-transparent py-1.5 px-5 text-black transition-all hover:bg-black hover:text-white text-center text-sm font-inter flex items-center justify-center;
+  @apply z-10 ;
 }
 
 .head_text {
-  @apply mt-5 text-5xl font-extrabold leading-[1.15] text-black sm:text-6xl;
+  @apply text-5xl font-extrabold leading-[1.15] text-white sm:text-6xl;
 }
 
 .orange_gradient {
@@ -102,7 +112,10 @@
 }
 
 .desc {
-  @apply mt-5 text-lg text-gray-600 sm:text-xl max-w-2xl;
+  @apply mt-5 text-lg text-gray-400 sm:text-xl max-w-2xl;
+}
+.desc_openai {
+  @apply mb-2 mt-3 lg:mt-4 px-2 pb-1 text-center text-lg text-white bg-gradient-to-tr from-purple-400 via-fuchsia-500 to-pink-500 sm:text-xl rounded-lg inline-block outline outline-offset-2 outline-1;
 }
 
 .search_input {
@@ -110,7 +123,7 @@
 }
 
 .copy_btn {
-  @apply w-7 h-7 rounded-full bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur flex justify-center items-center cursor-pointer;
+  @apply w-7 h-7 rounded-full bg-gray-200 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur flex justify-center items-center cursor-pointer;
 }
 
 .glassmorphism {
@@ -128,29 +141,43 @@
 
 /* Form Component */
 .form_textarea {
-  @apply w-full flex rounded-lg h-[140px] mt-2 p-3 text-sm text-gray-500 outline-0;
+  @apply w-full flex rounded-lg h-[140px] mt-2 p-3 text-sm text-white outline-0;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.openai_textarea {
+  @apply w-full flex h-10 py-3 pl-4 pr-16 rounded-xl text-sm text-gray-200 outline-0 bg-blackish bg-opacity-90;
 }
 
 .form_input {
-  @apply w-full flex rounded-lg mt-2 p-3 text-sm text-gray-500 outline-0;
+  @apply w-full flex rounded-lg mt-2 p-3 text-sm text-white outline-0;
 }
 
 /* Nav Component */
 .logo_text {
-  @apply max-sm:hidden font-satoshi font-semibold bg-gradient-to-r from-indigo-500 via-fuchsia-600 to-violet-600 bg-clip-text tracking-wide text-transparent;
+  @apply text-xl font-satoshi font-semibold bg-gradient-to-r from-indigo-500 via-fuchsia-600 to-violet-600 bg-clip-text tracking-wide text-transparent;
 }
 
 .dropdown {
-  @apply absolute right-0 top-full mt-3 w-full p-5 rounded-lg bg-white min-w-[210px] flex flex-col gap-2 justify-end items-end;
+  @apply absolute -right-2 top-12 w-full py-4 px-3 rounded-lg text-gray-100 bg-blackish min-w-[310px] flex flex-col gap-3 ;
+}
+.dropdown_large {
+  @apply absolute right-12 top-16 w-20 py-4 px-4 rounded-lg text-gray-100 bg-blackish min-w-[325px] flex flex-col gap-3 ;
 }
 
 .dropdown_link {
-  @apply text-sm font-inter text-gray-700 hover:text-gray-500 font-medium;
+  @apply text-sm font-inter text-gray-100 hover:text-gray-500 font-bold text-right;
 }
 
 /* PromptCard Component */
 .prompt_card {
-  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
+  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white bg-clip-padding p-4 backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
 }
 
 .flex-center {
@@ -167,4 +194,19 @@
 
 .flex-between {
   @apply flex justify-between items-center;
+}
+
+
+/* For Feed Loading */
+@keyframes blink {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
 }

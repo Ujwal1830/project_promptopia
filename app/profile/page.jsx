@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Profile from "@components/Profile";
+import LoadingLayout from "@components/LoadingLayout";
 
 const MyProfile = () => {
   const router = useRouter();
@@ -12,15 +13,27 @@ const MyProfile = () => {
 
   const [posts, setPosts] = useState([]);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await fetch(`/api/users/${session?.user.id}/posts`);
-      const data = await response.json();
-
-      setPosts(data);
-    };
-
-    if (session?.user.id) fetchPosts();
+    setTimeout(async () => {
+      try {
+        const fetchPosts = async () => {
+          try {
+              const response = await fetch(`/api/users/${session?.user.id}/posts`);
+              const data = await response.json();
+              setPosts(data);
+              setIsLoading(false);
+          } catch (error) {
+            console.log(error);
+          }
+        };
+        if (session?.user.id) fetchPosts();
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+      }
+    }, 2000);
   }, [session?.user.id]);
 
   const handleEdit = (post) => {
@@ -48,13 +61,15 @@ const MyProfile = () => {
   };
 
   return (
-    <Profile
-      name='My'
-      desc='Welcome to your personalized profile page. Share your exceptional prompts and inspire others with the power of your imagination'
-      data={posts}
-      handleEdit={handleEdit}
-      handleDelete={handleDelete}
-    />
+    <LoadingLayout loading={isLoading}>
+      <Profile
+        name="My"
+        desc="Welcome to your personalized profile page. Share your exceptional prompts and inspire others with the power of your imagination"
+        data={posts}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+      />
+    </LoadingLayout>
   );
 };
 
