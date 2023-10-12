@@ -67,7 +67,7 @@ const Feed = () => {
 
   return (
     // className="feed"
-    <section className="px-8 sm:px-32 w-full">
+    <section className="px-3 sm:px-32 w-full">
       <form className=" mt-1 flex justify-center items-center">
         <input
           type="text"

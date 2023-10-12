@@ -13,9 +13,9 @@ import { useEffect, useState } from "react";
 const OpenAIPage = () => {
   const router = useRouter();
   const {data: session, status } = useSession();
-  if(status === 'unauthenticated'){
-    router.push("/")
-  }
+  // if(status === 'unauthenticated'){
+  //   router.push("/")
+  // }
   
   // loading animation handler
   const [loading, setLoading] = useState(true);
@@ -36,9 +36,10 @@ const OpenAIPage = () => {
 
   const [sendChatFlag, setSendChatFlag] = useState(false);
 
+  const [summaryFlag, setSummaryFlag] = useState(false)
+
   const handleSaveChatClick = async(event) => {
-    event.preventDefault();
-    await sendChatLogToServer(session?.user.id, chatLog, setChatLog, fetchedChatLog, setChatSave, setSendChatFlag);
+    await sendChatLogToServer(session?.user.id, chatLog, setChatLog, fetchedChatLog, setChatSave, setSendChatFlag, setSummaryFlag);
   };
 
 
@@ -77,7 +78,7 @@ const OpenAIPage = () => {
   const handleNewChatClick = async()=>{
     if(chatLog.length !== 0 ){
       await handleSaveChatClick();
-      setChatSave(true);
+      // setChatSave(true);
       document.getElementById('my_modal_4').showModal();
       setTimeout(() => {
         setChatSave(false);
@@ -114,15 +115,20 @@ const OpenAIPage = () => {
         : <dialog id="my_modal_4" className="modal bg-black bg-opacity-60">
             <div className="modal-box w-fit p-14">
               <form method="dialog"><button onClick={()=>{setOpenModel(!openModel); setNewChatFlag(false);}} className="btn btn-sm btn-circle text-xl btn-ghost absolute right-2 top-2">✕</button></form>
-              <span className="text-white bg-red-700 p-3 rounded-lg shadow-lg ">{ isLoading ? "Please wait for Response!" : newChatflag ? "Chat is Already empty" : sendChatFlag ? "Chat Already Exist" : "Chat can't be empty !!👻"}</span>
+              <span className="text-white bg-red-700 p-3 rounded-lg shadow-lg ">
+                { isLoading && "Please wait for Response!" }
+                { newChatflag && "Chat is Already empty" } 
+                { sendChatFlag && "Chat Already Exist" } 
+                {summaryFlag && "Chat can't be empty !!👻" }
+              </span>
             </div>
           </dialog>}
 
       {/* Open AI Interface */}
       <div className="flex h-screen ">
         <div className={`${isSidebarOpen ? 'w-full sm:w-60' : 'md:w-5 w-1'} duration-300 bg-blackish py-12 relative`} >
-          <div className={`${!isSidebarOpen && 'rotate-180'} absolute cursor-pointer rounded-full -right-6 top-20  bg-grayish`}>
-            <svg onClick={()=>{setIsSidebarOpen(!isSidebarOpen)}} className="h-12 w-12 text-gray-200"  width="45px" height="45px" viewBox="0 0 25.00 25.00" fill="none" stroke="#e5e7eb" transform="matrix(-1, 0, 0, 1, 0, 0)"><g strokeWidth="0"></g><g strokeLinecap="round" strokeLinejoin="round"></g><g> <path d="M12 22.4199C17.5228 22.4199 22 17.9428 22 12.4199C22 6.89707 17.5228 2.41992 12 2.41992C6.47715 2.41992 2 6.89707 2 12.4199C2 17.9428 6.47715 22.4199 12 22.4199Z" stroke="#e5e7eb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M10.5596 8.41992L13.6196 11.29C13.778 11.4326 13.9047 11.6068 13.9914 11.8015C14.0781 11.9962 14.123 12.2068 14.123 12.4199C14.123 12.633 14.0781 12.8439 13.9914 13.0386C13.9047 13.2332 13.778 13.4075 13.6196 13.55L10.5596 16.4199" stroke="#e5e7eb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+          <div onClick={()=>{setIsSidebarOpen(!isSidebarOpen)}} className={`${!isSidebarOpen && 'rotate-180'} absolute cursor-pointer rounded-full -right-6 top-20  bg-grayish`}>
+            <svg  className="h-12 w-12 text-gray-200"  width="45px" height="45px" viewBox="0 0 25.00 25.00" fill="none" stroke="#e5e7eb" transform="matrix(-1, 0, 0, 1, 0, 0)"><g strokeWidth="0"></g><g strokeLinecap="round" strokeLinejoin="round"></g><g> <path d="M12 22.4199C17.5228 22.4199 22 17.9428 22 12.4199C22 6.89707 17.5228 2.41992 12 2.41992C6.47715 2.41992 2 6.89707 2 12.4199C2 17.9428 6.47715 22.4199 12 22.4199Z" stroke="#e5e7eb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M10.5596 8.41992L13.6196 11.29C13.778 11.4326 13.9047 11.6068 13.9914 11.8015C14.0781 11.9962 14.123 12.2068 14.123 12.4199C14.123 12.633 14.0781 12.8439 13.9914 13.0386C13.9047 13.2332 13.778 13.4075 13.6196 13.55L10.5596 16.4199" stroke="#e5e7eb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
           </div>
           <div className={`${!isSidebarOpen && 'scale-0'}mt-2 flex flex-col justify-center gap-2`} >
             <div>
@@ -148,10 +154,12 @@ const OpenAIPage = () => {
           </div>
         </div>
         <div className="text-2xl mt-12 flex-1 flex flex-col justify-between bg-grayish shadow-inner shadow-blackish" >
-          <div className="flex px-12 sm:px-28 justify-around shadow-lg shadow-blackish/40" >
-            <span className="flex justify-cneter pr-4 py-2 uppercase">Open AI</span>
+          <div className={`transition-opacity duration-300 ${isSidebarOpen ? 'opacity-0 sm:opacity-100' : 'opacity-100'} flex px-8 sm:px-20 justify-around shadow-lg bg-blackish shadow-blackish/40`} >
+            <span className={`text-center py-2 uppercase `}>
+              Open AI
+            </span>
             { chatLog.length !== 0 && <div className="flex justify-end items-center">
-              <button onClick={handleSaveChatClick} className=" btn btn-primary btn-sm" >Save Chat</button>
+              <button onClick={handleSaveChatClick} className=" rounded-lg bg-purple-600 text-sm px-3 py-2" >Save Chat</button>
             </div>}
           </div>
           <div className="h-fit flex flex-col overflow-y-auto">
@@ -159,21 +167,23 @@ const OpenAIPage = () => {
           </div>
           {chatLog.length === 0 && 
             <>
-              <div className="flex justify-center items-center h-screen">
+              <div className="flex flex-col justify-around items-center h-screen">
                 <div className="chat-container">
                   <h1 className={`px-2 text-center transition-opacity duration-300 ${isSidebarOpen ? 'opacity-0 sm:opacity-100' : 'opacity-100'} text-lg md:text-2xl text-ellipsis font-inter uppercase`}>
                     Welcome to openai ChatBot Assistance </h1>
                   {/* Your chat content goes here */}
                 </div>
+                <DummyPrompts isSidebarOpen={isSidebarOpen} />
               </div>
-              <DummyPrompts isSidebarOpen={isSidebarOpen} />
             </>
           }
-          <div className="bg-grayish py-2 ">
-            <hr className="text-ellipsis pb-2" />
-              <div className="mx-3 lg:mx-4 mb-2 rounded-full flex flex-row items-center gap-1">
-                    <form onSubmit={handleSendMessageCLick} className="relative flex flex-grow lg:px-20 ">
-                      <input type="text" placeholder="Type your message........" value={inputValue} onChange={(e) => setInputValue(e.target.value)} className="openai_textarea"/>
+          <div className="bg-blackish pb-4">
+            <hr className="text-ellipsis pt-2" />
+              <div className="mx-3 lg:mx-4 mb-2 rounded-full ">
+                    <form onSubmit={handleSendMessageCLick} className={`relative flex flex-grow lg:px-20 transition-opacity duration-300 ${isSidebarOpen ? 'opacity-0 sm:opacity-100' : 'opacity-100'}`}>
+                      <input type="text" placeholder="Type your message........" value={inputValue} onChange={(e) => setInputValue(e.target.value)} 
+                        className={`w-full flex h-10 py-3 pl-4 pr-16 rounded-xl text-sm text-gray-200 outline-0  bg-opacity-90`}
+                      />
                       <button
                         type="submit"
                         className="h-8 rounded-xl absolute lg:right-10 right-1 top-1 bottom-0"

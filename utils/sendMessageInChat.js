@@ -5,7 +5,7 @@ export const sendMessageInChat = async (message, setChatLog, setIsLoading) => {
     const headers = {
       "Content-Type": "application/json",
       Authorization:
-        "Bearer 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",
+        "Bearer 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",
     };
     const data = {
       model: "gpt-3.5-turbo-0301",

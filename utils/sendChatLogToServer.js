@@ -6,15 +6,21 @@ const summarizeChatLog=(chatLogData, ignoreList)=>{
     return summary.join(' ');
   }
 
-  export const sendChatLogToServer = async (userId, chatLogData,setChatLog, fetchedChatLog, setChatSave, setSendChatFlag) => {
+  export const sendChatLogToServer = async (userId, chatLogData,setChatLog, fetchedChatLog, setChatSave, setSendChatFlag, setSummaryFlag) => {
     const greetingsToIgnore = ['Hi', 'Hello', 'Hey'];
     const chatSummary = summarizeChatLog(chatLogData, greetingsToIgnore);
     const hasBotMessage = chatLogData.some((message) => message.type === 'bot');
+    
     if (!hasBotMessage) {
       console.error('Chat log does not contain a "bot" message. Not sending data.');
       setChatSave(false);
       document.getElementById('my_modal_4').showModal();
       return;
+    }
+    if(chatSummary===''){
+      setSummaryFlag(true);
+      document.getElementById('my_modal_4').showModal();
+      return ;
     }
 
     const doesSummaryNameExist = fetchedChatLog.some(
@@ -26,7 +32,7 @@ const summarizeChatLog=(chatLogData, ignoreList)=>{
         document.getElementById('my_modal_4').showModal();
         return 
     }
-
+    setChatSave(true);
     try {
       const response = await fetch(`/api/chatlog`, {
         method: "PATCH",

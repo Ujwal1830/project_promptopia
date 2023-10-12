@@ -12,7 +12,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
         imagination run wild with any AI-powered platform
       </p>
 
-      <div className="flex-1" style={{ width: '50%', margin: '0 auto' }} >
+      <div className="flex-1 w-[96%] md:w-[50%] " >
         <form
           onSubmit={handleSubmit}
           className='mt-10 p-4 flex-grow flex flex-col gap-5 rounded-lg outline outline-offset-2 outline-2 bg-white bg-opacity-90'

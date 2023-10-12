@@ -33,7 +33,7 @@ const EditPrompt = () => {
 
         if(promptId) { getPromptDetails(); }
 
-      }, 2000);
+      }, 1500);
     }, [promptId]);
 
     const updatePrompt = async (e) => {
